@@ -18,12 +18,6 @@ public class ChallengeManager : Singleton<ChallengeManager> {
     public OnChallengeWonListener OnChallengeWonEvent;
     public OnChallengeLostListener OnChallengeLostEvent;
 
-  /*  public UnityEvent ChallengeStartedEvent;
-    public UnityEvent ChallengeTurnTakenEvent;
-    public UnityEvent ChallengeWonEvent;
-    public UnityEvent ChallengeLostEvent;*/
-
-
     string _challengeId = null;
 
     public bool IsChallengeActive { get; set; }
@@ -133,10 +127,6 @@ public class ChallengeManager : Singleton<ChallengeManager> {
             LocalSlotType = chosenBlockState == SlotState.O ? SlotState.X : SlotState.O;
         }
         OnChallengeStartedEvent.Invoke();
-        /*Debug.LogError("localPLayerId>>" + TTTUI.Instance.LocalPlayerId);
-        Debug.LogError("chosenPlayerId>>" + chosenPlayerId);
-        Debug.LogError("chosenplayerBlock>>" + chosenPlayerBlock);
-        Debug.LogError("localBlock>>" + LocalSlotState.ToString());*/
 
     }
 

@@ -52,6 +52,7 @@ namespace Framework
         {
             
             bool hitListEmpty = false;
+
             bool relUIHit = CheckRelatedUIHit(out hitListEmpty);
             if (!relUIHit && !hitListEmpty)
             {
@@ -161,6 +162,11 @@ namespace Framework
         public bool CheckRelatedUIHit(out bool isHitListEmpty)
         {
             isHitListEmpty = true;
+            if (_relatedUIPanels.Count <= 0)
+            {
+                return false;
+            }
+            
             PointerEventData ped = new PointerEventData(EventSystem.current);
 
             ped.position = Input.mousePosition;

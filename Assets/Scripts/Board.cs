@@ -2,7 +2,7 @@
 
 public class Board : MonoBehaviour {
 
-    Slot[,] slots = new Slot[3, 3];
+    Slot[,] _slots = new Slot[3, 3];
     [SerializeField] float _slotSize = 2.5f;
     [SerializeField] GameObject _prefabX;
     [SerializeField] GameObject _prefabO;
@@ -22,8 +22,8 @@ public class Board : MonoBehaviour {
             {
                 Vector3 pos = startingPos + new Vector3(i * _slotSize, j * _slotSize, 0);
 
-                slots[i, j] = Instantiate(_prefabSlot).GetComponent<Slot>();
-                slots[i, j].Init(pos, i, j, _prefabX, _prefabO, _prefabSlot, _prefabHighlighted);
+                _slots[i, j] = Instantiate(_prefabSlot).GetComponent<Slot>();
+                _slots[i, j].Init(pos, i, j, _prefabX, _prefabO, _prefabSlot, _prefabHighlighted);
             }
         }
 	}
@@ -67,7 +67,7 @@ public class Board : MonoBehaviour {
         if(ChallengeManager.Instance.CurrentPlayerId == UIManager.Instance.LocalPlayerId) //if the last move was not made by this player
         {
             SlotState opponentSlotState = ChallengeManager.Instance.LocalSlotType == SlotState.O ? SlotState.X : SlotState.O;
-            slots[x, y].Mark(opponentSlotState);
+            _slots[x, y].Mark(opponentSlotState);
             CheckForGameWin();
         }
 
@@ -76,7 +76,7 @@ public class Board : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        if(bGameWon)
+        if(_bGameWon)
         {
             return;
         }
@@ -94,7 +94,7 @@ public class Board : MonoBehaviour {
             
             for (int j = 0; j < 3; j++)
             {
-                if (slots[i, j].slotState == SlotState.Empty)
+                if (_slots[i, j].slotState == SlotState.Empty)
                 {
                     count = 1;
                     break;
@@ -103,11 +103,11 @@ public class Board : MonoBehaviour {
                 if (j == 0)
                 {
                     count = 1;
-                    lastSlotState = slots[i, j].slotState;
+                    lastSlotState = _slots[i, j].slotState;
                 }
                 else
                 {
-                    if (slots[i, j].slotState == lastSlotState)
+                    if (_slots[i, j].slotState == lastSlotState)
                     {
                         count++;
                         if (count == 3)
@@ -124,7 +124,7 @@ public class Board : MonoBehaviour {
             }
             for (int j = 0; j < 3; j++)
             {
-                if (slots[j, i].slotState == SlotState.Empty)
+                if (_slots[j, i].slotState == SlotState.Empty)
                 {
                     hCount = 1;
                     break;
@@ -133,12 +133,12 @@ public class Board : MonoBehaviour {
 
                 if (j == 0)
                 {
-                    lastSlotState = slots[j, i].slotState;
+                    lastSlotState = _slots[j, i].slotState;
                     hCount = 1;
                 }
                 else
                 {
-                    if (slots[j, i].slotState == lastSlotState)
+                    if (_slots[j, i].slotState == lastSlotState)
                     {
                         hCount++;
                         if (hCount == 3)
@@ -156,23 +156,23 @@ public class Board : MonoBehaviour {
         }
         
 
-        lastSlotState = slots[0, 0].slotState;
+        lastSlotState = _slots[0, 0].slotState;
         if (lastSlotState != SlotState.Empty)
         {
-            if (slots[1, 1].slotState == lastSlotState)
+            if (_slots[1, 1].slotState == lastSlotState)
             {
-                if (slots[2, 2].slotState == lastSlotState)
+                if (_slots[2, 2].slotState == lastSlotState)
                 {
                     OnGameWin(lastSlotState);
                 }
             }
         }
-        lastSlotState = slots[2, 0].slotState;
+        lastSlotState = _slots[2, 0].slotState;
         if (lastSlotState != SlotState.Empty)
         {
-            if (slots[1, 1].slotState == lastSlotState)
+            if (_slots[1, 1].slotState == lastSlotState)
             {
-                if (slots[0, 2].slotState == lastSlotState)
+                if (_slots[0, 2].slotState == lastSlotState)
                 {
                     OnGameWin(lastSlotState);
                 }
@@ -183,7 +183,7 @@ public class Board : MonoBehaviour {
         {
             for (int j = 0; j < 3; j++)
             {
-                if(slots[i, j].slotState!=SlotState.Empty)
+                if(_slots[i, j].slotState!=SlotState.Empty)
                 {
                     markedCount++;
                 }
@@ -199,15 +199,14 @@ public class Board : MonoBehaviour {
         }
     }
 
-    bool bGameWon = false;
+    bool _bGameWon = false;
     void OnGameWin(SlotState winningSlotType)
     {
-        if(bGameWon) //if already won, return
+        if(_bGameWon) //if already won, return
         {
             return; 
         }
-        Debug.LogError("gamewin");
-        bGameWon = true;
+        _bGameWon = true;
         string message = "";
         if(winningSlotType == SlotState.Empty)
         {
